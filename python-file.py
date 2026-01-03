@@ -1,13 +1,12 @@
 import json
 import boto3
-import yaml  # NOTE: You must add a 'PyYAML' Lambda Layer for this to work
+import yaml # We need this to read the YAML rules
 
 # Initialize S3 Client
 s3 = boto3.client('s3')
 
 # CONFIGURATION
-# --- CORRECTED LINE 9 BELOW ---
-BUCKET_NAME = "ashwini-terraform-lab-bucket-2026" 
+BUCKET_NAME = "ashwini-terraform-lab-bucket-2026" # Matches your bucket name
 RULES_KEY = "governance-configs/dq_rules.yaml"
 
 def get_rules_from_s3():
