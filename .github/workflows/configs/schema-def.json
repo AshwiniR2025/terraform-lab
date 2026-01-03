@@ -1,0 +1,9 @@
+{
+  "table": "customer_data",
+  "columns": [
+    {"name": "customer_id", "type": "INTEGER", "required": true},
+    {"name": "first_name", "type": "STRING", "required": true},
+    {"name": "created_at", "type": "TIMESTAMP", "required": false}
+  ],
+  "partition_key": "created_at"
+}

@@ -1,0 +1,18 @@
+ruleset_version: "1.0"
+description: "Data Quality Standards for Ingestion"
+
+checks:
+  - field: "customer_id"
+    rule: "NOT_NULL"
+    severity: "CRITICAL"
+    
+  - field: "email"
+    rule: "REGEX_MATCH"
+    pattern: "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"
+    severity: "WARNING"
+
+  - field: "age"
+    rule: "RANGE"
+    min: 18
+    max: 120
+    severity: "CRITICAL"

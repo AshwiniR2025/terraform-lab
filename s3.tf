@@ -23,3 +23,15 @@ resource "aws_s3_bucket_versioning" "data_lake_ver" {
 output "s3_bucket_name" {
   value = aws_s3_bucket.data_lake.id
 }
+
+# Upload the Config files to S3 automatically
+resource "aws_s3_object" "upload_configs" {
+  for_each = fileset("${path.module}/configs/", "*")
+
+  bucket = aws_s3_bucket.data_lake.id
+  key    = "governance-configs/${each.value}" # Creates a folder in S3
+  source = "${path.module}/configs/${each.value}"
+  
+  # Tracks changes to the file so Terraform updates it when you edit the YAML/JSON
+  etag   = filemd5("${path.module}/configs/${each.value}")
+}
