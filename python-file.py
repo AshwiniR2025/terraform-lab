@@ -1,13 +1,12 @@
 import json
 import boto3
-import yaml # We need this to read the YAML rules
 
 # Initialize S3 Client
 s3 = boto3.client('s3')
 
 # CONFIGURATION
-BUCKET_NAME = "ashwini-terraform-lab-bucket-2026" # Matches your bucket name
-RULES_KEY = "governance-configs/dq_rules.yaml"
+BUCKET_NAME = "ashwini-terraform-lab-bucket-2026" 
+RULES_KEY = "governance-configs/dq_rules.json"  # UPDATED to .json
 
 def get_rules_from_s3():
     """Fetches and parses the data quality rules from S3."""
@@ -15,7 +14,8 @@ def get_rules_from_s3():
         print(f"Fetching rules from: {BUCKET_NAME}/{RULES_KEY}")
         response = s3.get_object(Bucket=BUCKET_NAME, Key=RULES_KEY)
         rules_content = response['Body'].read().decode('utf-8')
-        return yaml.safe_load(rules_content)
+        # We use json.loads because 'json' is built-in to Lambda (no errors!)
+        return json.loads(rules_content)
     except Exception as e:
         print(f"Error loading rules: {str(e)}")
         return None
@@ -24,7 +24,7 @@ def validate_record(record, rules):
     """Checks the record against the loaded rules."""
     errors = []
     
-    # Loop through each rule in the YAML file
+    # Loop through each rule in the JSON file
     for check in rules.get('checks', []):
         field = check['field']
         rule_type = check['rule']
@@ -46,17 +46,17 @@ def validate_record(record, rules):
 def lambda_handler(event, context):
     print("--- Starting Governed Data Quality Check ---")
     
-    # 1. Load Rules from S3 (Governance as Code)
+    # 1. Load Rules from S3
     rules = get_rules_from_s3()
     if not rules:
         return {'statusCode': 500, 'body': "Failed to load governance rules."}
 
-    # 2. Get Data (For testing, we use the event or a dummy record)
+    # 2. Get Data (We simulate incoming data here)
     incoming_data = event.get('data', {
         "customer_id": 123,
         "first_name": "Ashwini",
-        "age": 150,           # This should FAIL (Max is 120)
-        "email": None         # This might fail depending on your rules
+        "age": 150,           # This will FAIL (Max is 120)
+        "email": None
     })
     
     print(f"Processing Record: {incoming_data}")
