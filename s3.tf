@@ -35,3 +35,4 @@ resource "aws_s3_object" "upload_configs" {
   # Tracks changes to the file so Terraform updates it when you edit the YAML/JSON
   etag   = filemd5("${path.module}/configs/${each.value}")
 }
+#updating s3 config
