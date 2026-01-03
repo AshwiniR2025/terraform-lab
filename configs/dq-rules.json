@@ -1,0 +1,14 @@
+{
+  "checks": [
+    {
+      "field": "customer_id",
+      "rule": "NOT_NULL"
+    },
+    {
+      "field": "age",
+      "rule": "RANGE",
+      "min": 18,
+      "max": 120
+    }
+  ]
+}
