@@ -6,7 +6,7 @@ s3 = boto3.client('s3')
 
 # CONFIGURATION
 BUCKET_NAME = "ashwini-terraform-lab-bucket-2026" 
-RULES_KEY = "governance-configs/dq_rules.json"  # UPDATED to .json
+RULES_KEY = "governance-configs/dq-rules.json"  # UPDATED to .json
 
 def get_rules_from_s3():
     """Fetches and parses the data quality rules from S3."""
